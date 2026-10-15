@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Sign in{% endblock %} · Project 36 Payroll System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head><body>
+<div class="auth">
+  <aside class="auth-side">
+    <div class="brand"><div class="mark">₹</div><div><div class="t">Employee Payroll</div><div class="s">Statutory deduction management · Project 36</div></div></div>
+    <div>
+      <h2>Salaries, deductions and payslips in one database.</h2>
+      <p>PF, ESI, professional tax, TDS and loan EMIs are calculated by the system and locked once a month is processed.</p>
+    </div>
+    <div class="slip" aria-hidden="true">
+      <div class="h"><span>Payslip · Oct 2026</span><span>EMP003</span></div>
+      <div class="r"><span>Gross salary</span><span>₹1,00,130.00</span></div>
+      <div class="r"><span>Provident fund</span><span>₹1,800.00</span></div>
+      <div class="r t"><span>Total deductions</span><span>₹9,506.50</span></div>
+      <div class="n"><span>Net payable</span><span>₹90,623.50</span></div>
+      <div class="cap">Sample with synthetic data</div>
+    </div>
+  </aside>
+  <main class="auth-main"><div class="auth-card">
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% for c, m in msgs %}
+      <div class="alert alert-{{ c }} py-2" role="alert">{{ m }}</div>{% endfor %}{% endwith %}
+    {% block body %}{% endblock %}
+  </div></main>
+</div>
+</body></html>

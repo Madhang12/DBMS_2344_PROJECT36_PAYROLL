@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Payroll Dashboard{% endblock %}
+{% block sub %}{% if per %}Latest processed period: <strong>{{ per.period_name }}</strong> ({{ per.status }}){% else %}No payroll processed yet{% endif %}{% endblock %}
+{% block actions %}<a class="btn btn-gold btn-sm" href="{{ url_for('periods') }}"><i class="bi bi-play-circle"></i> Process payroll</a>{% endblock %}
+{% block content %}
+{% set gv = (totals.gross if totals else 0)|float %}{% set dv = (totals.ded if totals else 0)|float %}{% set nv = (totals.net if totals else 0)|float %}
+<section class="run">
+  <div>
+    <div class="lbl">Net payable{% if per %} · {{ per.period_name }}{% endif %}</div>
+    <div class="big"><span class="rs">₹</span>{{ nv|inr|replace('₹','') }}</div>
+    <div class="meta">{% if per %}<span class="badge b-{{ per.status }}">{{ per.status }}</span>{% endif %}<span>Gross {{ gv|inr }}</span></div>
+  </div>
+  <div>
+    <div class="split" role="img" aria-label="Net pay is {{ ((nv / gv * 100) if gv else 0)|round(1) }} percent of gross"><span class="n" style="width:{{ ((nv / gv * 100) if gv else 0)|round(2) }}%"></span><span class="d" style="width:{{ ((dv / gv * 100) if gv else 0)|round(2) }}%"></span></div>
+    <div class="split-legend">
+      <div><span class="sw" style="background:var(--green)"></span>Paid to employees<b>{{ nv|inr }}</b></div>
+      <div class="text-end"><span class="sw" style="background:#e3a72f"></span>Deductions ({{ ((dv / gv * 100) if gv else 0)|round(1) }}%)<b>{{ dv|inr }}</b></div>
+    </div>
+  </div>
+</section>
+<div class="facts">
+  <div><div class="v">{{ stats.employees }}</div><div class="l">Active employees</div></div>
+  <div><div class="v">{{ stats.departments }}</div><div class="l">Departments</div></div>
+  <div><div class="v">{{ stats.open_periods }}</div><div class="l">Open periods</div></div>
+  <div><div class="v">{{ stats.pending_transfers }}</div><div class="l">Pending transfers</div></div>
+  <div><div class="v">{{ stats.loan_outstanding|inr }}</div><div class="l">Outstanding on {{ stats.loans }} loans</div></div>
+</div>
+<div class="row g-3 mb-3">
+  <div class="col-lg-7"><div class="cardx"><div class="hd">Gross vs deductions vs net by period</div><div class="bd"><div class="chart-box"><canvas id="trend"></canvas></div></div></div></div>
+  <div class="col-lg-5"><div class="cardx"><div class="hd">Headcount by department</div><div class="bd"><div class="chart-box"><canvas id="dept"></canvas></div></div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-7"><div class="cardx"><div class="hd">Top 5 net salaries · {{ per.period_name if per else '' }}</div>
+    <table class="table table-hover"><thead><tr><th>Code</th><th>Employee</th><th class="num">Net salary</th><th></th></tr></thead><tbody>
+    {% for r in top %}<tr><td>{{ r.emp_code }}</td><td>{{ r.first_name }} {{ r.last_name }}</td><td class="num">{{ r.net_salary|inr }}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('payslip', slip_id=r.payslip_id) }}">Payslip</a></td></tr>
+    {% else %}<tr><td colspan="4" class="text-muted text-center py-3">No payroll processed yet.</td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="col-lg-5"><div class="cardx"><div class="hd">Auto deductions · {{ per.period_name if per else '' }}</div>
+    <table class="table"><tbody>{% for r in ded_mix %}<tr><td>{{ r.deduction_type }}</td><td class="num">{{ r.total|inr }}</td></tr>{% else %}<tr><td class="text-muted text-center py-3">-</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.js') }}"></script>
+<script>
+const trend = {{ trend|tojson }}, dept = {{ by_dept|tojson }};
+new Chart(document.getElementById('trend'), {type:'bar',
+  data:{labels:trend.map(t=>t.period_name),datasets:[
+    {label:'Gross',data:trend.map(t=>t.gross),backgroundColor:'#0d6b50'},
+    {label:'Deductions',data:trend.map(t=>t.ded),backgroundColor:'#e3a72f'},
+    {label:'Net',data:trend.map(t=>t.net),backgroundColor:'#15201c'}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:v=>'₹'+(v/100000).toFixed(0)+'L'}}}}});
+new Chart(document.getElementById('dept'), {type:'doughnut',
+  data:{labels:dept.map(d=>d.department_name),datasets:[{data:dept.map(d=>d.n),
+   backgroundColor:['#0d6b50','#e3a72f','#15201c','#7fb9a3','#b87a0a','#a8b5ad']}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+</script>
+{% endblock %}

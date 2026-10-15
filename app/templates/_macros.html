@@ -1,0 +1,16 @@
+{% macro cell(v, fmt) -%}
+  {%- if v is none -%}<span class="text-muted">-</span>
+  {%- elif fmt == 'money' -%}{{ v|inr }}
+  {%- elif fmt == 'badge' -%}<span class="badge b-{{ v }}">{{ v }}</span>
+  {%- elif fmt == 'yesno' -%}{{ 'Yes' if v|int == 1 else 'No' }}
+  {%- elif fmt == 'lop' -%}{% if v|float > 0 %}<span class="text-danger fw-semibold">{{ v }}</span>{% else %}{{ v }}{% endif %}
+  {%- else -%}{{ v }}{%- endif -%}
+{%- endmacro %}
+{% macro period_select(periods, selected, action) -%}
+<form method="get" action="{{ action }}" class="d-flex align-items-center gap-2 no-print">
+  <label class="form-label mb-0">Period</label>
+  <select name="period" class="form-select form-select-sm" style="width:auto" onchange="this.form.submit()">
+    {% for p in periods %}<option value="{{ p.payroll_period_id }}" {{ 'selected' if selected and p.payroll_period_id == selected }}>{{ p.period_name }} [{{ p.status }}]</option>{% endfor %}
+  </select>
+</form>
+{%- endmacro %}

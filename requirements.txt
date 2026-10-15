@@ -1,0 +1,7 @@
+# Runtime
+Flask>=3.0
+python-dotenv>=1.0
+# Only needed when DB_BACKEND=mysql ([rsa] pulls in 'cryptography', required by MySQL 8's default login method)
+PyMySQL[rsa]>=1.1
+# Only needed to regenerate screenshots (scripts/capture_screenshots.py)
+# playwright>=1.45

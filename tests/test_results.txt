@@ -1,0 +1,94 @@
+test_indian_system (test_app.AmountInWordsTests.test_indian_system) ... ok
+test_payslip_shows_amount_in_words (test_app.AmountInWordsTests.test_payslip_shows_amount_in_words) ... ok
+test_admin_can_open_everything (test_app.AuthTests.test_admin_can_open_everything) ... ok
+test_admin_creates_user_and_duplicates_are_refused (test_app.AuthTests.test_admin_creates_user_and_duplicates_are_refused) ... ok
+test_anonymous_is_redirected_to_login (test_app.AuthTests.test_anonymous_is_redirected_to_login) ... ok
+test_change_password (test_app.AuthTests.test_change_password) ... ok
+test_csrf_token_is_required_for_posts (test_app.AuthTests.test_csrf_token_is_required_for_posts) ... ok
+test_deactivated_user_cannot_sign_in_and_last_admin_is_protected (test_app.AuthTests.test_deactivated_user_cannot_sign_in_and_last_admin_is_protected) ... ok
+test_employee_cannot_post_to_management_endpoints (test_app.AuthTests.test_employee_cannot_post_to_management_endpoints) ... ok
+test_employee_sees_only_own_payslips (test_app.AuthTests.test_employee_sees_only_own_payslips) ... ok
+test_hr_cannot_open_admin_pages (test_app.AuthTests.test_hr_cannot_open_admin_pages) ... ok
+test_login_throttle_after_repeated_failures (test_app.AuthTests.test_login_throttle_after_repeated_failures) ... ok
+test_passwords_are_stored_hashed (test_app.AuthTests.test_passwords_are_stored_hashed) ... ok
+test_user_table_constraints (test_app.AuthTests.test_user_table_constraints) ... ok
+test_wrong_password_and_unknown_user_are_rejected (test_app.AuthTests.test_wrong_password_and_unknown_user_are_rejected) ... ok
+test_changing_config_changes_result (test_app.CalcTests.test_changing_config_changes_result) ... ok
+test_high_salary_with_lop_loan_and_manual_deduction (test_app.CalcTests.test_high_salary_with_lop_loan_and_manual_deduction) ... ok
+test_loan_emi_never_exceeds_outstanding_balance (test_app.CalcTests.test_loan_emi_never_exceeds_outstanding_balance) ... ok
+test_low_salary_gets_esi_but_no_tds (test_app.CalcTests.test_low_salary_gets_esi_but_no_tds) ... ok
+test_paid_leave_is_not_loss_of_pay (test_app.CalcTests.test_paid_leave_is_not_loss_of_pay) ... ok
+test_all_tables_exist (test_app.DatabaseTests.test_all_tables_exist) ... ok
+test_check_attendance_total (test_app.DatabaseTests.test_check_attendance_total) ... ok
+test_check_negative_salary (test_app.DatabaseTests.test_check_negative_salary) ... ok
+test_foreign_key_rejects_bad_department (test_app.DatabaseTests.test_foreign_key_rejects_bad_department) ... ok
+test_one_salary_structure_per_employee (test_app.DatabaseTests.test_one_salary_structure_per_employee) ... ok
+test_queries_sql_runs_completely (test_app.DatabaseTests.test_queries_sql_runs_completely)
+Every statement in database/queries.sql executes without error. ... ok
+test_restrict_delete_employee_with_payroll (test_app.DatabaseTests.test_restrict_delete_employee_with_payroll) ... ok
+test_seed_counts (test_app.DatabaseTests.test_seed_counts) ... ok
+test_unique_emp_code (test_app.DatabaseTests.test_unique_emp_code) ... ok
+test_console_connection_is_really_read_only (test_app.ExplorerTests.test_console_connection_is_really_read_only)
+The console opens the database with mode=ro, so even a write that slipped past the text filter would fail. ... ok
+test_console_refuses_writes_and_secrets (test_app.ExplorerTests.test_console_refuses_writes_and_secrets) ... ok
+test_console_row_limit (test_app.ExplorerTests.test_console_row_limit) ... ok
+test_console_runs_select (test_app.ExplorerTests.test_console_runs_select) ... ok
+test_explorer_page_via_web (test_app.ExplorerTests.test_explorer_page_via_web) ... ok
+test_introspection_lists_schema_objects (test_app.ExplorerTests.test_introspection_lists_schema_objects) ... ok
+test_forgot_page_is_public_and_known_user_gets_a_link (test_app.PasswordResetTests.test_forgot_page_is_public_and_known_user_gets_a_link) ... ok
+test_link_is_not_shown_when_demo_mode_is_off (test_app.PasswordResetTests.test_link_is_not_shown_when_demo_mode_is_off) ... ok
+test_reset_link_changes_the_password_and_works_only_once (test_app.PasswordResetTests.test_reset_link_changes_the_password_and_works_only_once) ... ok
+test_reset_rejects_weak_or_mismatched_passwords (test_app.PasswordResetTests.test_reset_rejects_weak_or_mismatched_passwords) ... ok
+test_reset_requests_are_throttled (test_app.PasswordResetTests.test_reset_requests_are_throttled) ... ok
+test_tampered_and_expired_links_are_refused (test_app.PasswordResetTests.test_tampered_and_expired_links_are_refused) ... ok
+test_unknown_and_inactive_users_get_the_same_message_but_no_link (test_app.PasswordResetTests.test_unknown_and_inactive_users_get_the_same_message_but_no_link) ... ok
+test_bank_transfer_flow (test_app.PayrollProcessingTests.test_bank_transfer_flow) ... ok
+test_cannot_process_twice (test_app.PayrollProcessingTests.test_cannot_process_twice) ... ok
+test_demo_periods_processed_and_paid (test_app.PayrollProcessingTests.test_demo_periods_processed_and_paid) ... ok
+test_failed_processing_rolls_back (test_app.PayrollProcessingTests.test_failed_processing_rolls_back) ... ok
+test_inactive_employee_is_skipped (test_app.PayrollProcessingTests.test_inactive_employee_is_skipped) ... ok
+test_itemised_deductions_match_totals (test_app.PayrollProcessingTests.test_itemised_deductions_match_totals) ... ok
+test_missing_attendance_is_skipped_and_reported (test_app.PayrollProcessingTests.test_missing_attendance_is_skipped_and_reported) ... ok
+test_net_equals_gross_minus_deductions_for_every_row (test_app.PayrollProcessingTests.test_net_equals_gross_minus_deductions_for_every_row) ... ok
+test_process_october_end_to_end (test_app.PayrollProcessingTests.test_process_october_end_to_end) ... ok
+test_cannot_insert_payroll_into_a_closed_period (test_app.TriggerAndViewTests.test_cannot_insert_payroll_into_a_closed_period) ... ok
+test_paid_payroll_cannot_be_updated_or_deleted (test_app.TriggerAndViewTests.test_paid_payroll_cannot_be_updated_or_deleted) ... ok
+test_salary_change_is_audited (test_app.TriggerAndViewTests.test_salary_change_is_audited) ... ok
+test_status_and_rate_changes_are_audited_but_unchanged_values_are_not (test_app.TriggerAndViewTests.test_status_and_rate_changes_are_audited_but_unchanged_values_are_not) ... ok
+test_triggers_and_views_exist (test_app.TriggerAndViewTests.test_triggers_and_views_exist) ... ok
+test_views_agree_with_base_tables (test_app.TriggerAndViewTests.test_views_agree_with_base_tables) ... ok
+test_all_pages_load (test_app.WebTests.test_all_pages_load) ... ok
+test_auto_deduction_rows_are_read_only (test_app.WebTests.test_auto_deduction_rows_are_read_only) ... ok
+test_csv_export (test_app.WebTests.test_csv_export) ... ok
+test_delete_department_with_employees_is_blocked (test_app.WebTests.test_delete_department_with_employees_is_blocked) ... ok
+test_delete_employee_with_payroll_is_blocked (test_app.WebTests.test_delete_employee_with_payroll_is_blocked) ... ok
+test_department_and_designation_crud (test_app.WebTests.test_department_and_designation_crud) ... ok
+test_duplicate_employee_code_shows_friendly_error (test_app.WebTests.test_duplicate_employee_code_shows_friendly_error) ... ok
+test_employee_crud (test_app.WebTests.test_employee_crud) ... ok
+test_locked_period_rejects_new_earning (test_app.WebTests.test_locked_period_rejects_new_earning) ... ok
+test_manual_loan_repayment (test_app.WebTests.test_manual_loan_repayment) ... ok
+test_open_period_accepts_earning_and_it_reaches_payslip (test_app.WebTests.test_open_period_accepts_earning_and_it_reaches_payslip) ... ok
+test_period_creation_and_duplicate (test_app.WebTests.test_period_creation_and_duplicate) ... ok
+test_process_via_web_then_double_process_is_refused (test_app.WebTests.test_process_via_web_then_double_process_is_refused) ... ok
+test_reports_page_has_all_seven_reports_with_data (test_app.WebTests.test_reports_page_has_all_seven_reports_with_data) ... ok
+test_required_field_validation (test_app.WebTests.test_required_field_validation) ... ok
+test_settings_change_applies_to_next_processing (test_app.WebTests.test_settings_change_applies_to_next_processing) ... ok
+test_unknown_page_404 (test_app.WebTests.test_unknown_page_404) ... ok
+test_audit_trigger_and_views (test_mysql.MySQLTests.test_audit_trigger_and_views) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_constraints_reject_bad_data (test_mysql.MySQLTests.test_constraints_reject_bad_data) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_introspection_and_console (test_mysql.MySQLTests.test_introspection_and_console) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_net_equals_gross_minus_deductions (test_mysql.MySQLTests.test_net_equals_gross_minus_deductions) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_payroll_totals_match_sqlite_results (test_mysql.MySQLTests.test_payroll_totals_match_sqlite_results) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_queries_sql_runs_completely (test_mysql.MySQLTests.test_queries_sql_runs_completely) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_row_counts_and_periods (test_mysql.MySQLTests.test_row_counts_and_periods) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_trigger_locks_paid_payroll (test_mysql.MySQLTests.test_trigger_locks_paid_payroll) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_web_login_and_pages (test_mysql.MySQLTests.test_web_login_and_pages) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_web_rule_violations_show_friendly_messages (test_mysql.MySQLTests.test_web_rule_violations_show_friendly_messages) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+test_zz_process_october_through_the_app (test_mysql.MySQLTests.test_zz_process_october_through_the_app) ... skipped 'set PAYROLL_MYSQL_TESTS=1 (and MYSQL_* variables) to run the MySQL tests'
+
+----------------------------------------------------------------------
+Ran 85 tests in 21.899s
+
+OK (skipped=11)
+
+Run on 2026-10-15 with Python 3.13.16, SQLite 3.45.1 (the 11 MySQL tests are skipped here; see test_results_mysql.txt)

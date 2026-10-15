@@ -1,0 +1,18 @@
+test_audit_trigger_and_views (tests.test_mysql.MySQLTests.test_audit_trigger_and_views) ... ok
+test_constraints_reject_bad_data (tests.test_mysql.MySQLTests.test_constraints_reject_bad_data) ... ok
+test_introspection_and_console (tests.test_mysql.MySQLTests.test_introspection_and_console) ... ok
+test_net_equals_gross_minus_deductions (tests.test_mysql.MySQLTests.test_net_equals_gross_minus_deductions) ... ok
+test_payroll_totals_match_sqlite_results (tests.test_mysql.MySQLTests.test_payroll_totals_match_sqlite_results) ... ok
+test_queries_sql_runs_completely (tests.test_mysql.MySQLTests.test_queries_sql_runs_completely) ... ok
+test_row_counts_and_periods (tests.test_mysql.MySQLTests.test_row_counts_and_periods) ... ok
+test_trigger_locks_paid_payroll (tests.test_mysql.MySQLTests.test_trigger_locks_paid_payroll) ... ok
+test_web_login_and_pages (tests.test_mysql.MySQLTests.test_web_login_and_pages) ... ok
+test_web_rule_violations_show_friendly_messages (tests.test_mysql.MySQLTests.test_web_rule_violations_show_friendly_messages) ... ok
+test_zz_process_october_through_the_app (tests.test_mysql.MySQLTests.test_zz_process_october_through_the_app) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.328s
+
+OK
+
+Run on 2026-10-15 against a real MySQL server 8.0.46-0ubuntu0.24.04.4, Python 3.13.16 (local, throw-away database)

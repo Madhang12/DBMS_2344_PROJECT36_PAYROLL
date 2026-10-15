@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}My payslips{% endblock %}
+{% block heading %}Welcome, {{ emp.first_name }}{% endblock %}
+{% block sub %}{{ emp.emp_code }} · {{ emp.title }} · {{ emp.department_name }} — you can see only your own details{% endblock %}
+{% block content %}
+<div class="row g-3">
+ <div class="col-lg-5"><div class="cardx"><div class="hd">My profile</div><div class="bd">
+  <table class="table table-sm mb-0"><tbody>
+   <tr><th>Name</th><td>{{ emp.first_name }} {{ emp.last_name }}</td></tr><tr><th>E-mail</th><td>{{ emp.email }}</td></tr>
+   <tr><th>Joined</th><td>{{ emp.date_of_joining }}</td></tr><tr><th>Bank</th><td>{{ emp.bank_name or '-' }}</td></tr></tbody></table></div></div></div>
+ <div class="col-lg-7"><div class="cardx"><div class="hd">My loans</div>
+  <table class="table"><thead><tr><th>Loan</th><th class="num">EMI</th><th class="num">Outstanding</th><th>Status</th></tr></thead><tbody>
+  {% for l in loans %}<tr><td>#{{ l.loan_id }} {{ l.purpose }}</td><td class="num">{{ l.emi_amount|inr }}</td><td class="num">{{ l.outstanding_balance|inr }}</td><td><span class="badge b-{{ l.status }}">{{ l.status }}</span></td></tr>
+  {% else %}<tr><td colspan="4" class="text-muted text-center py-3">No loans.</td></tr>{% endfor %}</tbody></table></div></div>
+ <div class="col-12"><div class="cardx"><div class="hd">My payslips</div>
+  <table class="table table-hover"><thead><tr><th>Payslip</th><th>Period</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net</th><th></th></tr></thead><tbody>
+  {% for s in slips %}<tr><td>{{ s.payslip_no }}</td><td>{{ s.period_name }}</td><td class="num">{{ s.gross_salary|inr }}</td><td class="num">{{ s.total_deductions|inr }}</td><td class="num">{{ s.net_salary|inr }}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('payslip', slip_id=s.payslip_id) }}">Open</a></td></tr>
+  {% else %}<tr><td colspan="6" class="text-muted text-center py-3">No payslips yet.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}

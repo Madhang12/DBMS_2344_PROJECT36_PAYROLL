@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Database Explorer{% endblock %}
+{% block heading %}Database Explorer{% endblock %}
+{% block sub %}Administrator only · live structure of the connected {{ backend }} database · read-only SQL console{% endblock %}
+{% block content %}
+<div class="row g-3">
+ <div class="col-12"><div class="cardx"><div class="hd"><span><i class="bi bi-terminal"></i> SQL console <span class="text-muted fw-normal">(SELECT only, runs on a read-only connection, {{ row_limit }} rows max)</span></span></div><div class="bd">
+  <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+   <div class="mb-2 no-print">{% for label, q in examples %}<button type="button" class="btn btn-sm btn-outline-secondary me-1 mb-1 example-q" data-sql="{{ q }}">{{ label }}</button>{% endfor %}</div>
+   <textarea class="form-control font-monospace mb-2" id="sqlbox" name="sql" rows="4" spellcheck="false" placeholder="SELECT * FROM v_department_cost">{{ sql }}</textarea>
+   <button class="btn btn-navy"><i class="bi bi-play-fill"></i> Run query</button></form>
+  {% if error %}<div class="alert alert-danger mt-3 mb-0">{{ error }}</div>{% endif %}
+  {% if result %}<div class="table-responsive mt-3"><table class="table table-sm table-striped"><thead><tr>{% for c in result.cols %}<th>{{ c }}</th>{% endfor %}</tr></thead><tbody>
+   {% for r in result.rows %}<tr>{% for v in r %}<td>{{ v if v is not none else 'NULL' }}</td>{% endfor %}</tr>{% else %}<tr><td colspan="{{ result.cols|length or 1 }}" class="text-muted">No rows.</td></tr>{% endfor %}</tbody></table>
+   <div class="text-muted small">{{ result.rows|length }} row(s){% if result.truncated %} - truncated to {{ row_limit }}{% endif %}</div></div>{% endif %}
+ </div></div></div>
+
+ <div class="col-lg-8"><div class="cardx"><div class="hd">Tables ({{ info.tables|length }})</div>
+  <table class="table table-sm align-middle"><thead><tr><th>Table</th><th class="num">Rows</th><th>Columns</th><th>Foreign keys</th></tr></thead><tbody>
+  {% for t in info.tables %}<tr><td><b>{{ t.name }}</b></td><td class="num">{{ t.rows }}</td>
+   <td class="small">{% for c in t.columns %}<span class="{{ 'fw-bold' if c.pk }}">{{ c.name }}</span>{% if c.pk %} <i class="bi bi-key-fill text-warning"></i>{% endif %}{{ ', ' if not loop.last }}{% endfor %}</td>
+   <td class="small">{% for f in t.fks %}{{ f.col }} &rarr; {{ f.ref_table }}.{{ f.ref_col }} <span class="text-muted">({{ f.on_delete }})</span>{{ '; ' if not loop.last }}{% else %}<span class="text-muted">-</span>{% endfor %}</td></tr>{% endfor %}</tbody></table></div></div>
+ <div class="col-lg-4">
+  <div class="cardx mb-3"><div class="hd">Views ({{ info.views|length }})</div><div class="bd small">{% for v in info.views %}<div><i class="bi bi-eye"></i> {{ v }}</div>{% endfor %}</div></div>
+  <div class="cardx"><div class="hd">Triggers ({{ info.triggers|length }})</div><div class="bd small">{% for t in info.triggers %}<div><i class="bi bi-lightning-charge"></i> <b>{{ t.name }}</b><br><span class="text-muted">{{ t.timing }} {{ t.event }} on {{ t.table }}</span></div>{% endfor %}</div></div>
+ </div>
+
+ <div class="col-12"><div class="cardx"><div class="hd">Audit trail <span class="text-muted fw-normal">(written by database triggers - latest 15)</span></div>
+  <table class="table table-sm"><thead><tr><th>#</th><th>When</th><th>Table</th><th>Record</th><th>Old value</th><th>New value</th></tr></thead><tbody>
+  {% for a in audit %}<tr><td>{{ a.audit_id }}</td><td>{{ a.changed_at }}</td><td>{{ a.table_name }}</td><td>{{ a.record_ref }}</td><td class="small">{{ a.old_value }}</td><td class="small">{{ a.new_value }}</td></tr>
+  {% else %}<tr><td colspan="6" class="text-muted text-center py-3">No audited changes yet. Edit a salary structure or a rate and come back.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script>document.querySelectorAll('.example-q').forEach(function(b){b.addEventListener('click',function(){document.getElementById('sqlbox').value=b.getAttribute('data-sql');});});</script>{% endblock %}

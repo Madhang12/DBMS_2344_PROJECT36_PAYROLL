@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Rates & Settings{% endblock %}
+{% block heading %}Deduction Rates &amp; Settings{% endblock %}
+{% block sub %}Illustrative values for a university project - NOT official statutory rates{% endblock %}
+{% block content %}
+<div class="cardx" style="max-width:820px"><div class="bd"><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div class="row g-3">
+ {% for c in cfg %}<div class="col-md-6"><label class="form-label" for="{{ c.config_key }}">{{ c.config_key }}</label>
+  <input class="form-control" id="{{ c.config_key }}" name="{{ c.config_key }}" type="number" step="any" min="0" value="{{ c.config_value }}">
+  <div class="form-text">{{ c.description }}</div></div>{% endfor %}
+ </div><button class="btn btn-navy mt-4"><i class="bi bi-check2"></i> Save settings</button></form></div></div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% from '_macros.html' import cell, period_select %}
+{% block title %}Reports{% endblock %}
+{% block heading %}Payroll Reports &amp; Summaries{% endblock %}
+{% block sub %}Every report is a plain SQL query - click "View SQL" to see it{% endblock %}
+{% block content %}
+<div class="mb-3">{{ period_select(periods, per.payroll_period_id if per else None, url_for('reports')) }}</div>
+{% for r in results %}
+<div class="cardx mb-3"><div class="hd"><span>{{ loop.index }}. {{ r.title }}</span>
+  <span><span class="pill me-2">{{ r.concept }}</span><button class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#sql{{ loop.index }}">View SQL</button></span></div>
+ <div class="collapse" id="sql{{ loop.index }}"><pre class="sql">{{ r.sql }}</pre></div>
+ <div class="table-responsive"><table class="table table-sm table-hover"><thead><tr>{% for c in r.cols %}<th class="{{ 'num' if c[2]=='money' }}">{{ c[1] }}</th>{% endfor %}</tr></thead><tbody>
+ {% for row in r.rows %}<tr>{% for c in r.cols %}<td class="{{ 'num' if c[2]=='money' }}">{{ cell(row[c[0]], c[2]) }}</td>{% endfor %}</tr>
+ {% else %}<tr><td colspan="{{ r.cols|length }}" class="text-muted text-center py-3">No rows for this selection.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endfor %}
+{% endblock %}

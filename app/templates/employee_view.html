@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ emp.first_name }} {{ emp.last_name }}{% endblock %}
+{% block heading %}{{ emp.first_name }} {{ emp.last_name }}{% endblock %}
+{% block sub %}{{ emp.emp_code }} · {{ emp.title }} · {{ emp.department_name }}{% endblock %}
+{% block actions %}<a class="btn btn-outline-primary btn-sm" href="{{ url_for('crud_form', key='employees', rid=emp.employee_id) }}"><i class="bi bi-pencil"></i> Edit</a>
+<a class="btn btn-outline-secondary btn-sm" href="{{ url_for('crud_list', key='employees') }}">Back</a>{% endblock %}
+{% block content %}
+<div class="row g-3">
+ <div class="col-lg-5"><div class="cardx"><div class="hd">Profile <span class="badge b-{{ emp.status }}">{{ emp.status }}</span></div><div class="bd">
+  <table class="table table-sm mb-0"><tbody>
+   <tr><th>E-mail</th><td>{{ emp.email }}</td></tr><tr><th>Phone</th><td>{{ emp.phone or '-' }}</td></tr>
+   <tr><th>Joined</th><td>{{ emp.date_of_joining }}</td></tr>
+   <tr><th>Bank</th><td>{{ emp.bank_name or '-' }}</td></tr><tr><th>Account (synthetic)</th><td>{{ emp.bank_account_no or '-' }}</td></tr>
+   <tr><th>IFSC</th><td>{{ emp.ifsc_code or '-' }}</td></tr></tbody></table></div></div></div>
+ <div class="col-lg-7"><div class="cardx"><div class="hd">Salary structure</div><div class="bd">
+  {% if sal %}<table class="table table-sm mb-0"><tbody>
+   <tr><th>Basic</th><td class="num">{{ sal.basic_salary|inr }}</td></tr><tr><th>HRA</th><td class="num">{{ sal.hra|inr }}</td></tr>
+   <tr><th>DA</th><td class="num">{{ sal.da|inr }}</td></tr><tr><th>Special allowance</th><td class="num">{{ sal.special_allowance|inr }}</td></tr>
+   <tr class="fw-bold"><th>Fixed gross</th><td class="num">{{ (sal.basic_salary + sal.hra + sal.da + sal.special_allowance)|inr }}</td></tr></tbody></table>
+  {% else %}<span class="text-muted">No salary structure yet.</span> <a href="{{ url_for('crud_form', key='salary-structures', employee_id=emp.employee_id) }}">Add one</a>{% endif %}</div></div></div>
+ <div class="col-12"><div class="cardx"><div class="hd">Payslips</div>
+  <table class="table table-hover"><thead><tr><th>Payslip</th><th>Period</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net</th><th></th></tr></thead><tbody>
+  {% for s in slips %}<tr><td>{{ s.payslip_no }}</td><td>{{ s.period_name }}</td><td class="num">{{ s.gross_salary|inr }}</td><td class="num">{{ s.total_deductions|inr }}</td><td class="num">{{ s.net_salary|inr }}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('payslip', slip_id=s.payslip_id) }}">Open</a></td></tr>
+  {% else %}<tr><td colspan="6" class="text-muted text-center py-3">No payslips yet.</td></tr>{% endfor %}</tbody></table></div></div>
+ <div class="col-12"><div class="cardx"><div class="hd">Loans</div>
+  <table class="table table-hover"><thead><tr><th>Loan</th><th>Purpose</th><th class="num">Amount</th><th class="num">EMI</th><th class="num">Outstanding</th><th>Status</th><th></th></tr></thead><tbody>
+  {% for l in loans %}<tr><td>#{{ l.loan_id }}</td><td>{{ l.purpose }}</td><td class="num">{{ l.loan_amount|inr }}</td><td class="num">{{ l.emi_amount|inr }}</td><td class="num">{{ l.outstanding_balance|inr }}</td><td><span class="badge b-{{ l.status }}">{{ l.status }}</span></td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('loan_view', lid=l.loan_id) }}">Repayments</a></td></tr>
+  {% else %}<tr><td colspan="7" class="text-muted text-center py-3">No loans.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}

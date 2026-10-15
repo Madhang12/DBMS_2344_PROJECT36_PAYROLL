@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% from '_macros.html' import cell, period_select %}
+{% block title %}Bank Transfers{% endblock %}
+{% block heading %}Bank Transfers{% endblock %}
+{% block sub %}Simulated transfer records - no real bank connection · {{ per.period_name if per else '' }}{% endblock %}
+{% block content %}
+<div class="row g-3 mb-3">{% for s in summ %}<div class="col-md-3"><div class="cardx stat"><div><div class="v">{{ s.total|inr }}</div><div class="l"><span class="badge b-{{ s.status }}">{{ s.status }}</span> {{ s.n }} transfer(s)</div></div></div></div>{% endfor %}</div>
+<div class="cardx"><div class="hd">{{ period_select(periods, per.payroll_period_id if per else None, url_for('transfers')) }}</div>
+ <div class="table-responsive"><table class="table table-hover"><thead><tr><th>Reference</th><th>Code</th><th>Employee</th><th>Bank</th><th>Account</th><th>IFSC</th><th class="num">Amount</th><th>Date</th><th>Status</th></tr></thead><tbody>
+ {% for r in rows %}<tr><td>{{ r.reference_no }}</td><td>{{ r.emp_code }}</td><td>{{ r.first_name }} {{ r.last_name }}</td><td>{{ r.bank_name }}</td><td>{{ r.account_no }}</td><td>{{ r.ifsc_code }}</td><td class="num">{{ r.amount|inr }}</td><td>{{ cell(r.transfer_date, None) }}</td><td><span class="badge b-{{ r.status }}">{{ r.status }}</span></td></tr>
+ {% else %}<tr><td colspan="9" class="text-center text-muted py-4">No transfer records for this period. Generate them from <a href="{{ url_for('periods') }}">Payroll Periods</a>.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

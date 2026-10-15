@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Payslip {{ ps.payslip_no }}{% endblock %}
+{% block heading %}Payslip{% endblock %}
+{% block sub %}{{ ps.payslip_no }}{% endblock %}
+{% block actions %}<button class="btn btn-navy btn-sm" onclick="window.print()"><i class="bi bi-printer"></i> Print / Save PDF</button>
+<a class="btn btn-outline-secondary btn-sm" href="{{ url_for('payroll_register', period=ps.payroll_period_id) }}">Back</a>{% endblock %}
+{% block content %}
+<div class="payslip">
+ <div class="ph"><div><h2>Payslip · {{ ps.period_name }}</h2><div class="sub">Sample organisation (synthetic data) · {{ ps.start_date }} to {{ ps.end_date }}</div></div><div class="text-end"><div class="fw-bold">{{ ps.payslip_no }}</div><div class="sub">Generated {{ ps.generated_on }}</div></div></div>
+ <div class="row g-0 who">
+  <div class="col-sm-6"><strong>{{ ps.first_name }} {{ ps.last_name }}</strong> ({{ ps.emp_code }})<br>{{ ps.title }} · {{ ps.department_name }}<br>Joined {{ ps.date_of_joining }}</div>
+  <div class="col-sm-6 text-sm-end">{{ ps.bank_name or '-' }}<br>A/c {{ ps.bank_account_no or '-' }} · {{ ps.ifsc_code or '-' }}<br>Working days {{ ps.working_days }} · LOP days {{ ps.lop_days }}</div></div>
+ <div class="row g-0">
+  <div class="col-md-6 border-end"><table class="table table-sm mb-0"><thead><tr><th>Earnings</th><th class="num">Amount</th></tr></thead><tbody>
+   <tr><td>Basic salary</td><td class="num">{{ ps.basic_salary|inr }}</td></tr><tr><td>House rent allowance</td><td class="num">{{ ps.hra|inr }}</td></tr>
+   <tr><td>Dearness allowance</td><td class="num">{{ ps.da|inr }}</td></tr><tr><td>Special allowance</td><td class="num">{{ ps.special_allowance|inr }}</td></tr>
+   {% if ps.lop_amount|float > 0 %}<tr class="text-danger"><td>Less: Loss of pay ({{ ps.lop_days }} day(s))</td><td class="num">- {{ ps.lop_amount|inr }}</td></tr>{% endif %}
+   {% for x in extras %}<tr><td>{{ x.earning_type }}{% if x.remarks %} <small class="text-muted">({{ x.remarks }})</small>{% endif %}</td><td class="num">{{ x.amount|inr }}</td></tr>{% endfor %}
+   <tr class="tot"><td>Gross salary</td><td class="num">{{ ps.gross_salary|inr }}</td></tr></tbody></table></div>
+  <div class="col-md-6"><table class="table table-sm mb-0"><thead><tr><th>Deductions</th><th class="num">Amount</th></tr></thead><tbody>
+   {% for d in deds %}<tr><td>{{ d.deduction_type }}{% if d.is_statutory|int == 1 %} <span class="badge b-PROCESSED">statutory</span>{% endif %}</td><td class="num">{{ d.amount|inr }}</td></tr>
+   {% else %}<tr><td colspan="2" class="text-muted">No deductions</td></tr>{% endfor %}
+   <tr class="tot"><td>Total deductions</td><td class="num">{{ ps.total_deductions|inr }}</td></tr></tbody></table></div>
+ </div>
+ <div class="net"><span>Net salary payable</span><span>{{ ps.net_salary|inr }}</span></div>
+ <div class="words">{{ ps.net_salary|inr_words }}</div>
+ <div class="tear"></div>
+ <div class="foot">Bank transfer: {% if transfer %}{{ transfer.reference_no }} · <span class="badge b-{{ transfer.status }}">{{ transfer.status }}</span>{% if transfer.transfer_date %} on {{ transfer.transfer_date }}{% endif %}{% else %}not generated yet{% endif %}.
+  Deduction rates are illustrative, not official statutory rates. This is a computer-generated demo payslip.</div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Users{% endblock %}
+{% block heading %}User accounts{% endblock %}
+{% block sub %}Administrator only · passwords are stored as salted hashes, never in clear text{% endblock %}
+{% block content %}
+<div class="row g-3">
+ <div class="col-lg-8"><div class="cardx"><div class="hd">Accounts</div>
+  <table class="table table-hover align-middle"><thead><tr><th>Username</th><th>Role</th><th>Employee</th><th>Status</th><th class="text-end">Actions</th></tr></thead><tbody>
+  {% for u in rows %}<tr><td>{{ u.username }}</td><td><span class="badge b-{{ 'ACTIVE' if u.role == 'ADMIN' else 'OPEN' }}">{{ u.role }}</span></td><td>{{ u.emp_code or '-' }}</td>
+   <td><span class="badge b-{{ 'ACTIVE' if u.is_active else 'INACTIVE' }}">{{ 'ACTIVE' if u.is_active else 'INACTIVE' }}</span></td>
+   <td class="text-end">
+    <form class="d-inline" method="post" action="{{ url_for('user_toggle', uid=u.user_id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-secondary">{{ 'Deactivate' if u.is_active else 'Activate' }}</button></form>
+    <form class="d-inline" method="post" action="{{ url_for('user_reset', uid=u.user_id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input name="password" type="password" placeholder="new password" minlength="8" required class="form-control form-control-sm d-inline-block" style="width:130px"><button class="btn btn-sm btn-outline-primary">Reset</button></form>
+   </td></tr>{% endfor %}</tbody></table></div></div>
+ <div class="col-lg-4"><div class="cardx"><div class="hd">New user</div><div class="bd"><form method="post" action="{{ url_for('user_create') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label class="form-label" for="username">Username</label><input class="form-control mb-2" id="username" name="username" required maxlength="30">
+  <label class="form-label" for="role">Role</label><select class="form-select mb-2" id="role" name="role">{% for r in roles %}<option>{{ r }}</option>{% endfor %}</select>
+  <label class="form-label" for="employee_id">Employee (for EMPLOYEE role)</label><select class="form-select mb-2" id="employee_id" name="employee_id"><option value="">-</option>
+   {% for e in emps %}<option value="{{ e.employee_id }}">{{ e.emp_code }} - {{ e.first_name }} {{ e.last_name }}</option>{% endfor %}</select>
+  <label class="form-label" for="password">Password (min 8)</label><input class="form-control mb-3" id="password" name="password" type="password" minlength="8" required>
+  <button class="btn btn-navy w-100"><i class="bi bi-person-plus"></i> Create user</button></form></div></div></div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% from '_macros.html' import period_select %}
+{% block title %}Payroll & Payslips{% endblock %}
+{% block heading %}Payroll Register &amp; Payslips{% endblock %}
+{% block sub %}{{ per.period_name if per else 'No period' }} · gross − deductions = net{% endblock %}
+{% block actions %}{% if per %}<a class="btn btn-outline-secondary btn-sm" href="{{ url_for('payroll_csv', period=per.payroll_period_id) }}"><i class="bi bi-download"></i> CSV</a>{% endif %}{% endblock %}
+{% block content %}
+<div class="cardx"><div class="hd">{{ period_select(periods, per.payroll_period_id if per else None, url_for('payroll_register')) }}
+  {% if tot %}<span>Gross <strong>{{ tot.gross|inr }}</strong> · Deductions <strong>{{ tot.ded|inr }}</strong> · Net <strong>{{ tot.net|inr }}</strong></span>{% endif %}</div>
+ <div class="table-responsive"><table class="table table-hover"><thead><tr><th>Payslip</th><th>Code</th><th>Employee</th><th>Department</th><th class="num">Gross</th><th class="num">Statutory</th><th class="num">Loan EMI</th><th class="num">Other</th><th class="num">Net</th><th></th></tr></thead><tbody>
+ {% for r in rows %}<tr><td>{{ r.payslip_no }}</td><td>{{ r.emp_code }}</td><td>{{ r.first_name }} {{ r.last_name }}</td><td>{{ r.department_name }}</td>
+  <td class="num">{{ r.gross_salary|inr }}</td><td class="num">{{ r.statutory_deductions|inr }}</td><td class="num">{{ r.loan_deductions|inr }}</td><td class="num">{{ r.other_deductions|inr }}</td><td class="num fw-semibold">{{ r.net_salary|inr }}</td>
+  <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('payslip', slip_id=r.payslip_id) }}"><i class="bi bi-file-earmark-text"></i> Payslip</a></td></tr>
+ {% else %}<tr><td colspan="10" class="text-center text-muted py-4">This period has not been processed yet. Go to <a href="{{ url_for('periods') }}">Payroll Periods</a>.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if rid else 'Add' }} {{ cfg.singular }}{% endblock %}
+{% block heading %}{{ 'Edit' if rid else 'Add' }} {{ cfg.singular }}{% endblock %}
+{% block sub %}Fields marked * are required. Database constraints are checked on save.{% endblock %}
+{% block content %}
+<div class="cardx" style="max-width:820px"><div class="bd">
+<form method="post" novalidate><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="row g-3">
+  {% for f in cfg.fields %}
+    <div class="col-md-{{ 12 if f.type == 'textarea' else 6 }}">
+      <label class="form-label" for="{{ f.name }}">{{ f.label }}{{ ' *' if f.required }}</label>
+      {% if f.type == 'select' %}
+        <select class="form-select" id="{{ f.name }}" name="{{ f.name }}">
+          <option value="">-- choose --</option>
+          {% for val, label in options[f.name] %}<option value="{{ val }}" {{ 'selected' if values.get(f.name) is not none and values.get(f.name)|string == val|string }}>{{ label }}</option>{% endfor %}
+        </select>
+      {% else %}
+        <input class="form-control" id="{{ f.name }}" name="{{ f.name }}" type="{{ f.type }}"
+               value="{{ values.get(f.name) if values.get(f.name) is not none else '' }}"
+               {% if f.step %}step="{{ f.step }}"{% endif %}{% if f.min is defined %} min="{{ f.min }}"{% endif %}{% if f.max is defined %} max="{{ f.max }}"{% endif %}
+               {% if f.placeholder %}placeholder="{{ f.placeholder }}"{% endif %}>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+  <div class="mt-4 d-flex gap-2">
+    <button class="btn btn-navy"><i class="bi bi-check2"></i> Save</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('crud_list', key=key) }}">Cancel</a>
+  </div>
+</form></div></div>
+{% endblock %}

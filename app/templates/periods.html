@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Payroll Periods{% endblock %}
+{% block heading %}Payroll Periods{% endblock %}
+{% block sub %}Workflow: OPEN → process payroll → PROCESSED → generate bank transfers → mark paid → PAID{% endblock %}
+{% block content %}
+<div class="cardx mb-3"><div class="hd">Create a payroll period</div><div class="bd">
+ <form method="post" class="row g-2 align-items-end"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="col-md-3"><label class="form-label">Month</label><select class="form-select" name="period_month">{% for m in months %}<option value="{{ loop.index }}">{{ m }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><label class="form-label">Year</label><input class="form-control" type="number" name="period_year" value="{{ next_year }}" min="2000" max="2100"></div>
+  <div class="col-md-2"><button class="btn btn-navy w-100"><i class="bi bi-plus-lg"></i> Create</button></div>
+ </form></div></div>
+<div class="cardx"><div class="hd">All periods <span class="text-muted fw-normal">{{ active }} active employees would be included</span></div>
+ <div class="table-responsive"><table class="table table-hover"><thead><tr><th>Period</th><th>Dates</th><th>Status</th><th class="num">Attendance rows</th><th class="num">Payslips</th><th class="num">Net total</th><th class="text-end">Actions</th></tr></thead><tbody>
+ {% for p in rows %}<tr><td class="fw-semibold">{{ p.period_name }}</td><td>{{ p.start_date }} → {{ p.end_date }}</td><td><span class="badge b-{{ p.status }}">{{ p.status }}</span></td>
+  <td class="num">{{ p.att_rows }}</td><td class="num">{{ p.payslips }}</td><td class="num">{{ p.net_total|inr }}</td>
+  <td class="text-end text-nowrap">
+   {% if p.status == 'OPEN' %}
+     <form class="d-inline" method="post" action="{{ url_for('period_process', pid=p.payroll_period_id) }}" data-confirm="Process payroll for {{ p.period_name }}? Inputs will be locked."><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-gold"><i class="bi bi-play-fill"></i> Process payroll</button></form>
+     <form class="d-inline" method="post" action="{{ url_for('period_delete', pid=p.payroll_period_id) }}" data-confirm="Delete this period?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+   {% elif p.status == 'PROCESSED' %}
+     <a class="btn btn-sm btn-outline-primary" href="{{ url_for('payroll_register', period=p.payroll_period_id) }}">Payslips</a>
+     {% if p.transfers == 0 %}<form class="d-inline" method="post" action="{{ url_for('period_transfers', pid=p.payroll_period_id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-navy">Generate bank transfers</button></form>
+     {% else %}<form class="d-inline" method="post" action="{{ url_for('period_paid', pid=p.payroll_period_id) }}" data-confirm="Mark all transfers as paid (simulated)?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-navy">Mark transfers paid</button></form>{% endif %}
+   {% else %}
+     <a class="btn btn-sm btn-outline-primary" href="{{ url_for('payroll_register', period=p.payroll_period_id) }}">Payslips</a>
+     <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('transfers', period=p.payroll_period_id) }}">Transfers</a>
+   {% endif %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Payroll{% endblock %} · Project 36 Payroll System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% set ep = request.endpoint %}{% set ck = request.view_args.get('key') if request.view_args else None %}
+<nav class="sidebar">
+  <div class="brand"><div class="mark">₹</div><div><div class="t">Employee Payroll</div><div class="s">Statutory deductions · Project 36</div></div></div>
+{% if user and user.role == 'EMPLOYEE' %}
+  <div class="nav-h">Self service</div>
+  <a href="{{ url_for('me') }}" class="{{ 'active' if ep in ('me','payslip') }}"><i class="bi bi-person-badge"></i> My payslips</a>
+  <a href="{{ url_for('change_password') }}" class="{{ 'active' if ep == 'change_password' }}"><i class="bi bi-key"></i> Change password</a>
+{% else %}
+  <div class="nav-h">Overview</div>
+  <a href="{{ url_for('dashboard') }}" class="{{ 'active' if ep == 'dashboard' }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <div class="nav-h">Organisation</div>
+  {% for k in ['employees','departments','designations'] %}
+  <a href="{{ url_for('crud_list', key=k) }}" class="{{ 'active' if ck == k or (k=='employees' and ep=='employee_view') }}"><i class="bi bi-{{ crud_nav[k].icon }}"></i> {{ crud_nav[k].title }}</a>{% endfor %}
+  <div class="nav-h">Compensation</div>
+  {% for k in ['salary-structures','attendance','earnings','deductions','loans'] %}
+  <a href="{{ url_for('crud_list', key=k) }}" class="{{ 'active' if ck == k or (k=='loans' and ep=='loan_view') }}"><i class="bi bi-{{ crud_nav[k].icon }}"></i> {{ crud_nav[k].title }}</a>{% endfor %}
+  <div class="nav-h">Payroll</div>
+  <a href="{{ url_for('periods') }}" class="{{ 'active' if ep == 'periods' }}"><i class="bi bi-calendar3"></i> Payroll Periods</a>
+  <a href="{{ url_for('payroll_register') }}" class="{{ 'active' if ep in ('payroll_register','payslip') }}"><i class="bi bi-file-earmark-text"></i> Payroll &amp; Payslips</a>
+  <a href="{{ url_for('transfers') }}" class="{{ 'active' if ep == 'transfers' }}"><i class="bi bi-bank2"></i> Bank Transfers</a>
+  <a href="{{ url_for('reports') }}" class="{{ 'active' if ep == 'reports' }}"><i class="bi bi-bar-chart-line"></i> Reports</a>
+  {% if user and user.role == 'ADMIN' %}<a href="{{ url_for('settings') }}" class="{{ 'active' if ep == 'settings' }}"><i class="bi bi-sliders"></i> Rates &amp; Settings</a>
+  <div class="nav-h">Administration</div>
+  <a href="{{ url_for('users') }}" class="{{ 'active' if ep == 'users' }}"><i class="bi bi-people"></i> Users &amp; Roles</a>
+  <a href="{{ url_for('database') }}" class="{{ 'active' if ep == 'database' }}"><i class="bi bi-database-gear"></i> Database Explorer</a>{% endif %}
+  <div class="nav-h">Account</div>
+  <a href="{{ url_for('change_password') }}" class="{{ 'active' if ep == 'change_password' }}"><i class="bi bi-key"></i> Change password</a>
+{% endif %}
+</nav>
+<main class="main">
+  <div class="topbar">
+    <div><h1 class="page-title">{% block heading %}{% endblock %}</h1><div class="page-sub">{% block sub %}{% endblock %}</div></div>
+    <div class="d-flex gap-2 align-items-center actions"><span class="pill"><i class="bi bi-database"></i> {{ backend }}</span>{% block actions %}{% endblock %}
+      {% if user %}<span class="pill user-pill"><i class="bi bi-person-circle"></i> {{ user.username }} · {{ user.role }}</span>
+      <form method="post" action="{{ url_for('logout') }}" class="d-inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-outline-secondary btn-sm" title="Sign out"><i class="bi bi-box-arrow-right"></i></button></form>{% endif %}</div>
+  </div>
+  <div class="flash-wrap">
+  {% with msgs = get_flashed_messages(with_categories=true) %}{% for c, m in msgs %}
+    <div class="alert alert-{{ c }} alert-dismissible fade show" role="alert">{{ m }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endwith %}
+  </div>
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='vendor/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body></html>
