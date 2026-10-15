@@ -5,8 +5,8 @@
 **Course:** Database Management Systems - Project-Based Learning
 
 ## Links (fill in before submitting)
-- GitHub repository: [PASTE GITHUB REPOSITORY URL HERE]
-- Demo video (Google Drive, 5 minutes): [PASTE GOOGLE DRIVE VIDEO URL HERE]
+- GitHub repository: https://github.com/Madhang12/DBMS_2344_PROJECT36_PAYROLL
+- Demo video (Google Drive, 5 minutes): https://drive.google.com/file/d/1FA6l8YMcu4JHd_9D2KsfjU_lk6wlybD5/view?usp=drive_link
 
 ## Contents of the submission folder
 | Item | Location |

@@ -89,7 +89,7 @@ Simulated bank transfers; illustrative rates; single-server demo (no HTTPS / dep
 password-reset links are shown on screen because there is no e-mail server; small synthetic data set; MySQL tested on one local server version (8.0.46).
 
 ## Links
-- GitHub repository: [PASTE GITHUB REPOSITORY URL HERE]
-- Demo video: [PASTE GOOGLE DRIVE VIDEO URL HERE]
+- GitHub repository: https://github.com/Madhang12/DBMS_2344_PROJECT36_PAYROLL
+- Demo video: https://drive.google.com/file/d/1FA6l8YMcu4JHd_9D2KsfjU_lk6wlybD5/view?usp=drive_link
 
 Licence: MIT (see `LICENSE`).
